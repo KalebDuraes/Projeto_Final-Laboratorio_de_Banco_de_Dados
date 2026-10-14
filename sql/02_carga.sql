@@ -1,5 +1,7 @@
-
--- BANCO DE DADOS: Sistema de Gerenciamento de Oficina Mecânica
+-- =====================================================================
+-- PROJETO FINAL - LABORATÓRIO DE BANCO DE DADOS (ETAPA 2)
+-- Script 02: Carga de Dados (Atualizada e Compatível com o Novo DDL)
+-- =====================================================================
 
 USE oficina_mecanica;
 
@@ -9,44 +11,54 @@ INSERT INTO cliente (id_cliente, nome, cep, estado, cidade, bairro, logradouro, 
 (2, 'Ana Luiza Peixoto', '71000000', 'DF', 'Brasília', 'Guará', 'QI 10', '5', NULL, 'F', '22233344455', NULL),
 (3, 'João Pedro Gomes', '72000000', 'DF', 'Brasília', 'Taguatinga', 'QSA 12', '34', 'Casa', 'F', '33344455566', NULL),
 (4, 'Empresa de Logística DF', '73000000', 'DF', 'Brasília', 'SIA', 'Trecho 2', '100', 'Galpão A', 'J', NULL, '11222333000144'),
-(5, 'Kaleb Kelvin', '74000000', 'GO', 'Goiânia', 'Bueno', 'Av T-63', '1000', 'Apt 20', 'F', '44455566677', NULL),
+(5, 'Bruno Mendes', '74000000', 'GO', 'Goiânia', 'Bueno', 'Av T-63', '1000', 'Apt 20', 'F', '44455566677', NULL),
 (6, 'Rianne Moreira', '75000000', 'DF', 'Brasília', 'Águas Claras', 'Rua das Figueiras', '5', NULL, 'F', '55566677788', NULL),
 (7, 'Transportes Rápidos Ltda', '76000000', 'SP', 'São Paulo', 'Mooca', 'Rua Bresser', '500', 'Sala 2', 'J', NULL, '22333444000155'),
 (8, 'Carlos Souza', '77000000', 'DF', 'Brasília', 'Asa Sul', 'SQS 205', '11', 'Apt 402', 'F', '66677788899', NULL),
 (9, 'Maria Oliveira', '78000000', 'DF', 'Brasília', 'Lago Sul', 'SHIS QI 5', '1', NULL, 'F', '77788899900', NULL),
 (10, 'Locadora Veículos Center', '79000000', 'DF', 'Brasília', 'Sudoeste', 'SIG Quadra 1', '22', NULL, 'J', NULL, '33444555000166');
 
--- 2. CARGA: VEÍCULO
-INSERT INTO veiculo (id_veiculo, modelo, id_cliente) VALUES
-(1, 'Honda Civic 2020', 1),
-(2, 'Toyota Corolla 2021', 2),
-(3, 'Volkswagen Polo 2019', 3),
-(4, 'Fiat Ducato 2018 (Frota)', 4),
-(5, 'Mercedes Sprinter 2022 (Frota)', 4),
-(6, 'Hyundai HB20 2022', 5),
-(7, 'Chevrolet Onix 2023', 6),
-(8, 'Volvo FH 540 (Frota)', 7),
-(9, 'Scania R450 (Frota)', 7),
-(10, 'Jeep Compass 2021', 8),
-(11, 'Renault Kwid 2020', 8),
-(12, 'BMW X1 2022', 9),
-(13, 'Fiat Argo 2021', 10),
-(14, 'Fiat Mobi 2022', 10),
-(15, 'Volkswagen T-Cross 2023', 10);
+-- 2. CARGA: TELEFONE DO CLIENTE (Atende ao feedback)
+INSERT INTO cliente_telefone (numero_telefone, id_cliente) VALUES
+('(61) 98111-1111', 1),
+('(61) 98222-2222', 2),
+('(61) 98333-3333', 3),
+('(61) 3344-4444', 4),
+('(62) 98555-5555', 5),
+('(61) 98666-6666', 6),
+('(11) 3377-7777', 7),
+('(61) 98888-8888', 8),
+('(61) 98999-9999', 9),
+('(61) 3300-0000', 10);
 
--- 3. CARGA: FUNCIONÁRIOS E SUPERVISORES (Autorrelacionamento de contorno)
--- Chefes não têm supervisores (NULL)
-INSERT INTO funcionario (id_funcionario, nome, tipo_funcionario, id_supervisor) VALUES
-(1, 'Roberto Alves (Gerente Mecânica)', 'MECANICO', NULL),
-(2, 'Juliana Castro (Recepção)', 'ATENDENTE', NULL),
-(3, 'Marcos Lima (Mecânico Sênior)', 'MECANICO', 1),
-(4, 'Felipe Santos (Mecânico Júnior)', 'MECANICO', 3),
-(5, 'Diego Ferreira (Mecânico Júnior)', 'MECANICO', 3),
-(6, 'Camila Rocha (Atendimento)', 'ATENDENTE', NULL),
-(7, 'Thiago Mendes (Mecânico Sênior)', 'MECANICO', 1),
-(8, 'Lucas Pereira (Mecânico Aprendiz)', 'MECANICO', 7);
+-- 3. CARGA: E-MAIL DO CLIENTE (Atende ao feedback)
+INSERT INTO cliente_email (endereco_email, id_cliente) VALUES
+('arthur.moreira@email.com', 1),
+('ana.luiza@email.com', 2),
+('joao.pedro@email.com', 3),
+('contato@logisticadf.com', 4),
+('bruno.mendes@email.com', 5),
+('rianne.moreira@email.com', 6),
+('contato@transportesrapidos.com', 7),
+('carlos.souza@email.com', 8),
+('maria.oliveira@email.com', 9),
+('contato@locadoracenter.com', 10);
 
--- 4. CARGA: CATÁLOGO DE SERVIÇOS E PEÇAS
+-- 4. CARGA: ATENDENTE (Tabela dedicada)
+INSERT INTO atendente (id_atendente, nome, cpf) VALUES
+(1, 'Juliana Castro', '12345678901'),
+(2, 'Camila Rocha', '23456789012');
+
+-- 5. CARGA: MECÂNICO (Tabela dedicada com autorrelacionamento hierárquico)
+INSERT INTO mecanico (id_mecanico, nome, cpf, id_supervisor) VALUES
+(1, 'Roberto Alves (Gerente Mecânica)', '34567890123', NULL),
+(2, 'Marcos Lima (Mecânico Sênior)', '45678901234', 1),
+(3, 'Felipe Santos (Mecânico Júnior)', '56789012345', 2),
+(4, 'Diego Ferreira (Mecânico Júnior)', '67890123456', 2),
+(5, 'Thiago Mendes (Mecânico Sênior)', '78901234567', 1),
+(6, 'Lucas Pereira (Mecânico Aprendiz)', '89012345678', 5);
+
+-- 6. CARGA: CATÁLOGO DE SERVIÇOS E PEÇAS
 INSERT INTO servico (id_servico, nome, descricao, valor_referencia) VALUES
 (1, 'Troca de Óleo', 'Substituição do óleo do motor e filtro', 150.00),
 (2, 'Alinhamento e Balanceamento', 'Ajuste da geometria da suspensão', 120.00),
@@ -55,65 +67,80 @@ INSERT INTO servico (id_servico, nome, descricao, valor_referencia) VALUES
 (5, 'Limpeza de Bicos', 'Limpeza do sistema de injeção', 180.00),
 (6, 'Revisão Geral', 'Check-up de 40 itens do veículo', 300.00);
 
-INSERT INTO peca (id_peca, nome, descricao) VALUES
-(1, 'Óleo 5W30 Sintético (Litro)', 'Óleo para motores modernos'),
-(2, 'Filtro de Óleo', 'Filtro padrão'),
-(3, 'Pastilha de Freio (Par)', 'Pastilhas de cerâmica'),
-(4, 'Disco de Freio', 'Disco ventilado'),
-(5, 'Correia Dentada', 'Correia de borracha de alta resistência'),
-(6, 'Filtro de Ar', 'Filtro de ar do motor'),
-(7, 'Filtro de Combustível', 'Filtro de linha'),
-(8, 'Vela de Ignição', 'Vela de Iridium');
+INSERT INTO peca (id_peca, nome, descricao, preco_unitario_sugerido) VALUES
+(1, 'Óleo 5W30 Sintético (Litro)', 'Óleo para motores modernos', 45.00),
+(2, 'Filtro de Óleo', 'Filtro padrão', 25.00),
+(3, 'Pastilha de Freio (Par)', 'Pastilhas de cerâmica', 150.00),
+(4, 'Disco de Freio', 'Disco ventilado', 120.00),
+(5, 'Correia Dentada', 'Correia de borracha de alta resistência', 180.00),
+(6, 'Filtro de Ar', 'Filtro de ar do motor', 35.00),
+(7, 'Filtro de Combustível', 'Filtro de linha', 40.00),
+(8, 'Vela de Ignição', 'Vela de Iridium', 60.00);
 
--- 5. CARGA: ORDEM DE SERVIÇO 
--- A maioria CONCLUIDA, algumas ABERTA e EM_EXECUCAO
-INSERT INTO ordem_servico (id_ordem_servico, data_abertura, data_fechamento, situacao, id_veiculo, id_os_garantia) VALUES
-(1, '2026-01-10', '2026-01-12', 'CONCLUIDA', 1, NULL),
-(2, '2026-01-15', '2026-01-15', 'CONCLUIDA', 2, NULL),
-(3, '2026-02-05', '2026-02-10', 'CONCLUIDA', 4, NULL),
-(4, '2026-02-12', '2026-02-14', 'CONCLUIDA', 3, NULL),
-(5, '2026-03-01', '2026-03-03', 'CONCLUIDA', 6, NULL),
-(6, '2026-03-15', '2026-03-16', 'CONCLUIDA', 5, NULL),
-(7, '2026-04-10', '2026-04-11', 'CONCLUIDA', 7, NULL),
-(8, '2026-04-20', '2026-04-25', 'CONCLUIDA', 8, NULL),
-(9, '2026-05-02', '2026-05-05', 'CONCLUIDA', 9, NULL),
-(10, '2026-05-15', '2026-05-17', 'CONCLUIDA', 10, NULL),
-(11, '2026-05-20', '2026-05-22', 'CONCLUIDA', 11, NULL),
-(12, '2026-06-01', '2026-06-03', 'CONCLUIDA', 12, NULL),
-(13, '2026-06-10', '2026-06-12', 'CONCLUIDA', 13, NULL),
-(14, '2026-06-15', '2026-06-16', 'CONCLUIDA', 14, NULL),
-(15, '2026-07-01', '2026-07-05', 'CONCLUIDA', 15, NULL),
-(16, '2026-07-10', '2026-07-12', 'CONCLUIDA', 1, NULL),
-(17, '2026-07-15', '2026-07-16', 'CONCLUIDA', 2, NULL),
-(18, '2026-07-20', '2026-07-22', 'CONCLUIDA', 3, NULL),
-(19, '2026-08-01', '2026-08-03', 'CONCLUIDA', 4, NULL),
-(20, '2026-08-05', '2026-08-06', 'CONCLUIDA', 5, NULL),
-(21, '2026-08-10', '2026-08-12', 'CONCLUIDA', 6, NULL),
-(22, '2026-08-15', '2026-08-18', 'CONCLUIDA', 7, NULL),
-(23, '2026-08-20', '2026-08-25', 'CONCLUIDA', 8, NULL),
-(24, '2026-08-28', '2026-08-30', 'CONCLUIDA', 9, NULL),
-(25, '2026-09-01', '2026-09-02', 'CONCLUIDA', 10, NULL),
-(26, '2026-09-03', '2026-09-04', 'CONCLUIDA', 11, NULL),
-(27, '2026-09-05', '2026-09-06', 'CONCLUIDA', 12, NULL),
-(28, '2026-09-07', '2026-09-08', 'CONCLUIDA', 13, NULL),
-(29, '2026-09-09', '2026-09-10', 'CONCLUIDA', 14, NULL),
-(30, '2026-09-11', '2026-09-12', 'CONCLUIDA', 15, NULL),
-(31, '2026-09-13', '2026-09-14', 'CONCLUIDA', 1, NULL),
-(32, '2026-09-14', '2026-09-14', 'CANCELADA', 2, NULL),
-(33, '2026-09-15', '2026-09-15', 'CANCELADA', 3, NULL),
-(34, '2026-09-16', '2026-09-18', 'CONCLUIDA', 4, NULL),
-(35, '2026-09-17', NULL, 'AGUARDANDO_PECAS', 5, NULL),
-(36, '2026-09-18', NULL, 'EM_EXECUCAO', 6, NULL),
-(37, '2026-09-18', NULL, 'EM_EXECUCAO', 7, NULL),
-(38, '2026-09-19', NULL, 'ABERTA', 8, NULL),
-(39, '2026-09-19', NULL, 'ABERTA', 9, NULL),
-(40, '2026-09-19', NULL, 'ABERTA', 10, NULL),
--- OS de Garantia
-(41, '2026-09-20', NULL, 'EM_EXECUCAO', 1, 1),
-(42, '2026-09-20', NULL, 'ABERTA', 3, 4);
+-- 7. CARGA: VEÍCULO
+INSERT INTO veiculo (id_veiculo, modelo, placa, id_cliente) VALUES
+(1, 'Honda Civic 2020', 'ABC1234', 1),
+(2, 'Toyota Corolla 2021', 'DEF5678', 2),
+(3, 'Volkswagen Polo 2019', 'GHI9012', 3),
+(4, 'Fiat Ducato 2018 (Frota)', 'JKL3456', 4),
+(5, 'Mercedes Sprinter 2022 (Frota)', 'MNO7890', 4),
+(6, 'Hyundai HB20 2022', 'PQR1234', 5),
+(7, 'Chevrolet Onix 2023', 'STU5678', 6),
+(8, 'Volvo FH 540 (Frota)', 'VWX9012', 7),
+(9, 'Scania R450 (Frota)', 'YZA3456', 7),
+(10, 'Jeep Compass 2021', 'BCD7890', 8),
+(11, 'Renault Kwid 2020', 'EFG1234', 8),
+(12, 'BMW X1 2022', 'HIJ5678', 9),
+(13, 'Fiat Argo 2021', 'KLM9012', 10),
+(14, 'Fiat Mobi 2022', 'NOP3456', 10),
+(15, 'Volkswagen T-Cross 2023', 'QRS7890', 10);
 
--- 6. CARGA: HISTÓRICO OS
--- Cada OS tem pelo menos 3 registros (ABERTA -> EM_EXECUCAO -> CONCLUIDA)
+-- 8. CARGA: ORDEM DE SERVIÇO (Atribuindo id_atendente)
+INSERT INTO ordem_servico (id_ordem_servico, data_abertura, data_fechamento, situacao, id_veiculo, id_atendente, id_os_garantia) VALUES
+(1, '2026-01-10', '2026-01-12', 'CONCLUIDA', 1, 1, NULL),
+(2, '2026-01-15', '2026-01-15', 'CONCLUIDA', 2, 2, NULL),
+(3, '2026-02-05', '2026-02-10', 'CONCLUIDA', 4, 1, NULL),
+(4, '2026-02-12', '2026-02-14', 'CONCLUIDA', 3, 2, NULL),
+(5, '2026-03-01', '2026-03-03', 'CONCLUIDA', 6, 1, NULL),
+(6, '2026-03-15', '2026-03-16', 'CONCLUIDA', 5, 2, NULL),
+(7, '2026-04-10', '2026-04-11', 'CONCLUIDA', 7, 1, NULL),
+(8, '2026-04-20', '2026-04-25', 'CONCLUIDA', 8, 2, NULL),
+(9, '2026-05-02', '2026-05-05', 'CONCLUIDA', 9, 1, NULL),
+(10, '2026-05-15', '2026-05-17', 'CONCLUIDA', 10, 2, NULL),
+(11, '2026-05-20', '2026-05-22', 'CONCLUIDA', 11, 1, NULL),
+(12, '2026-06-01', '2026-06-03', 'CONCLUIDA', 12, 2, NULL),
+(13, '2026-06-10', '2026-06-12', 'CONCLUIDA', 13, 1, NULL),
+(14, '2026-06-15', '2026-06-16', 'CONCLUIDA', 14, 2, NULL),
+(15, '2026-07-01', '2026-07-05', 'CONCLUIDA', 15, 1, NULL),
+(16, '2026-07-10', '2026-07-12', 'CONCLUIDA', 1, 2, NULL),
+(17, '2026-07-15', '2026-07-16', 'CONCLUIDA', 2, 1, NULL),
+(18, '2026-07-20', '2026-07-22', 'CONCLUIDA', 3, 2, NULL),
+(19, '2026-08-01', '2026-08-03', 'CONCLUIDA', 4, 1, NULL),
+(20, '2026-08-05', '2026-08-06', 'CONCLUIDA', 5, 2, NULL),
+(21, '2026-08-10', '2026-08-12', 'CONCLUIDA', 6, 1, NULL),
+(22, '2026-08-15', '2026-08-18', 'CONCLUIDA', 7, 2, NULL),
+(23, '2026-08-20', '2026-08-25', 'CONCLUIDA', 8, 1, NULL),
+(24, '2026-08-28', '2026-08-30', 'CONCLUIDA', 9, 2, NULL),
+(25, '2026-09-01', '2026-09-02', 'CONCLUIDA', 10, 1, NULL),
+(26, '2026-09-03', '2026-09-04', 'CONCLUIDA', 11, 2, NULL),
+(27, '2026-09-05', '2026-09-06', 'CONCLUIDA', 12, 1, NULL),
+(28, '2026-09-07', '2026-09-08', 'CONCLUIDA', 13, 2, NULL),
+(29, '2026-09-09', '2026-09-10', 'CONCLUIDA', 14, 1, NULL),
+(30, '2026-09-11', '2026-09-12', 'CONCLUIDA', 15, 2, NULL),
+(31, '2026-09-13', '2026-09-14', 'CONCLUIDA', 1, 1, NULL),
+(32, '2026-09-14', '2026-09-14', 'CANCELADA', 2, 2, NULL),
+(33, '2026-09-15', '2026-09-15', 'CANCELADA', 3, 1, NULL),
+(34, '2026-09-16', '2026-09-18', 'CONCLUIDA', 4, 2, NULL),
+(35, '2026-09-17', NULL, 'AGUARDANDO_PECAS', 5, 1, NULL),
+(36, '2026-09-18', NULL, 'EM_EXECUCAO', 6, 2, NULL),
+(37, '2026-09-18', NULL, 'EM_EXECUCAO', 7, 1, NULL),
+(38, '2026-09-19', NULL, 'ABERTA', 8, 2, NULL),
+(39, '2026-09-19', NULL, 'ABERTA', 9, 1, NULL),
+(40, '2026-09-19', NULL, 'ABERTA', 10, 2, NULL),
+(41, '2026-09-20', NULL, 'EM_EXECUCAO', 1, 1, 1),
+(42, '2026-09-20', NULL, 'ABERTA', 3, 2, 4);
+
+-- 9. CARGA: HISTÓRICO OS
 INSERT INTO historico_os (data_hora, id_ordem_servico, situacao, descricao) VALUES
 ('2026-01-10 08:00:00', 1, 'ABERTA', 'Veículo recebido na oficina.'),
 ('2026-01-11 09:30:00', 1, 'EM_EXECUCAO', 'Serviço iniciado pelos mecânicos.'),
@@ -228,8 +255,21 @@ INSERT INTO historico_os (data_hora, id_ordem_servico, situacao, descricao) VALU
 ('2026-09-20 09:00:00', 41, 'EM_EXECUCAO', 'Avaliando defeito em garantia'),
 ('2026-09-20 10:00:00', 42, 'ABERTA', 'Retorno de garantia - OS 4');
 
--- 7. CARGA: ASSOCIAÇÕES (N:N) - SERVIÇOS EXECUTADOS
-INSERT INTO os_servico (id_ordem_servico, id_servico, quantidade, valor_cobrado, horas_mao_obra, tempo_garantia_meses) VALUES
+-- 10. CARGA: PAGAMENTO (Para atender à nova entidade da Etapa 2)
+INSERT INTO pagamento (id_pagamento, id_ordem_servico, valor_total, forma_pagamento, data_pagamento) VALUES
+(1, 1, 150.00, 'PIX', '2026-01-12 16:10:00'),
+(2, 2, 120.00, 'CARTAO_CREDITO', '2026-01-15 14:15:00'),
+(3, 3, 350.00, 'CARTAO_DEBITO', '2026-02-10 17:10:00'),
+(4, 4, 350.00, 'PIX', '2026-02-14 11:15:00'),
+(5, 5, 180.00, 'DINHEIRO', '2026-03-03 08:30:00'),
+(6, 6, 335.00, 'CARTAO_CREDITO', '2026-03-16 10:30:00'),
+(7, 7, 150.00, 'PIX', '2026-04-11 11:20:00'),
+(8, 8, 150.00, 'CARTAO_CREDITO', '2026-04-25 16:40:00'),
+(9, 9, 200.00, 'PIX', '2026-05-05 10:00:00'),
+(10, 10, 350.00, 'DINHEIRO', '2026-05-17 15:30:00');
+
+-- 11. CARGA: ASSOCIAÇÕES (N:N) - SERVIÇOS EXECUTADOS (Garante RN07: ao menos um serviço por OS)
+INSERT INTO os_servico (id_ordem_servico, id_servico, quantidade, valor_cobrado, horas_mao_obra, tempo_garantia) VALUES
 (1, 1, 1, 150.00, 1.0, 3),
 (2, 2, 1, 120.00, 1.5, 3),
 (3, 3, 1, 200.00, 2.0, 6),
@@ -261,14 +301,19 @@ INSERT INTO os_servico (id_ordem_servico, id_servico, quantidade, valor_cobrado,
 (29, 5, 1, 180.00, 2.0, 6),
 (30, 6, 1, 300.00, 4.0, 12),
 (31, 1, 1, 150.00, 1.0, 3),
+(32, 1, 1, 120.00, 1.0, 3),
+(33, 2, 1, 200.00, 1.5, 3),
 (34, 6, 1, 300.00, 4.0, 12),
 (35, 3, 1, 200.00, 2.0, 6),
 (36, 1, 1, 150.00, 1.0, 3),
 (37, 2, 1, 120.00, 1.5, 3),
-(41, 1, 1, 0.00, 1.0, 3), -- Retorno de Garantia (Custo 0 para o cliente)
+(38, 1, 1, 150.00, 1.0, 3),
+(39, 2, 1, 120.00, 1.5, 3),
+(40, 3, 1, 200.00, 2.0, 6),
+(41, 1, 1, 0.00, 1.0, 3), -- Retorno de Garantia (Custo 0)
 (42, 4, 1, 0.00, 3.5, 12);
 
--- 8. CARGA: ASSOCIAÇÕES (N:N) - PEÇAS UTILIZADAS
+-- 12. CARGA: ASSOCIAÇÕES (N:N) - PEÇAS UTILIZADAS
 INSERT INTO os_peca (id_ordem_servico, id_peca, quantidade, valor_unitario) VALUES
 (1, 1, 4, 45.00),
 (1, 2, 1, 25.00),
@@ -307,16 +352,15 @@ INSERT INTO os_peca (id_ordem_servico, id_peca, quantidade, valor_unitario) VALU
 (34, 2, 1, 25.00),
 (35, 3, 1, 150.00),
 (36, 1, 4, 45.00),
-(41, 1, 1, 0.00), -- Reposição em garantia
+(41, 1, 1, 0.00),
 (42, 5, 1, 0.00);
 
--- 9. CARGA: ASSOCIAÇÕES (N:N) - FUNCIONÁRIOS RESPONSÁVEIS
-INSERT INTO os_funcionario (id_ordem_servico, id_funcionario) VALUES
-(1, 3), (1, 6), (2, 4), (2, 2), (3, 5), (3, 6),
-(4, 7), (4, 2), (5, 8), (5, 6), (6, 3), (7, 4),
-(8, 5), (9, 7), (10, 8), (11, 3), (12, 4), (13, 5),
-(14, 7), (15, 8), (16, 3), (17, 4), (18, 5), (19, 7),
-(20, 8), (21, 3), (22, 4), (23, 5), (24, 7), (25, 8),
-(26, 3), (27, 4), (28, 5), (29, 7), (30, 8), (31, 3),
-(32, 2), (33, 6), (34, 4), (35, 5), (36, 7), (37, 8),
-(38, 2), (39, 6), (40, 2), (41, 1), (42, 1);
+-- 13. CARGA: ASSOCIAÇÕES (N:N) - MECÂNICOS RESPONSÁVEIS (Tabela os_mecanico)
+INSERT INTO os_mecanico (id_ordem_servico, id_mecanico) VALUES
+(1, 2), (2, 3), (3, 4), (4, 5), (5, 6), (6, 2),
+(7, 3), (8, 4), (9, 5), (10, 6), (11, 2), (12, 3),
+(13, 4), (14, 5), (15, 6), (16, 2), (17, 3), (18, 4),
+(19, 5), (20, 6), (21, 2), (22, 3), (23, 4), (24, 5),
+(25, 6), (26, 2), (27, 3), (28, 4), (29, 5), (30, 6),
+(31, 2), (32, 3), (33, 4), (34, 5), (35, 6), (36, 2),
+(37, 3), (38, 4), (39, 5), (40, 6), (41, 1), (42, 1);
