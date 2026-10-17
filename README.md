@@ -31,8 +31,8 @@ Pagamento.
 Associações entre ordens de serviço, serviços, peças e mecânicos.
 
 4. Organização dos arquivos SQL:
-- 01_ddlsql.sql: criação do banco de dados, tabelas, restrições e índices.
-- 02_cargasol.sql: inserção dos dados de teste.
+- 01_ddl.sql: criação do banco de dados, tabelas, restrições e índices.
+- 02_carga.sql: inserção dos dados de teste.
 - 03_consultas.sql: consultas SQL para responder às perguntas de negócio.
 - 04_otimizacao.sql: consolidação dos três testes de análise de desempenho.
   
