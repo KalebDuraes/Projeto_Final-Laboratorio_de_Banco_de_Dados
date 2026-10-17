@@ -35,6 +35,7 @@ Associações entre ordens de serviço, serviços, peças e mecânicos.
 - 02_carga.sql: inserção dos dados de teste.
 - 03_consultas.sql: consultas SQL para responder às perguntas de negócio.
 - 04_otimizacao.sql: consolidação dos três testes de análise de desempenho.
+- 04.1_testes.sql: testes das consultas de otimização.
   
 5. Como executar o projeto:
 Abra o MySQL Workbench e conecte-se ao servidor MySQL.
