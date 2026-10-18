@@ -43,33 +43,47 @@ public class ClienteDAO {
     }
 
     // ==========================================
-    // READ (Listar Clientes para a Tabela da Interface)
+    // READ (Buscar Cliente por CPF para Preencher a Tela)
     // ==========================================
-    public List<Object[]> listar() throws SQLException {
-        String sql = "SELECT id_cliente, nome, cpf, cnpj, tipo_pessoa FROM cliente";
-        List<Object[]> clientes = new ArrayList<>();
+    public boolean buscarPorCpf(String cpf, javax.swing.JTextField txtNome, javax.swing.JComboBox<String> comboTipo, 
+            javax.swing.JTextField txtCnpj, javax.swing.JTextField txtCep, javax.swing.JTextField txtEstado, 
+            javax.swing.JTextField txtCidade, javax.swing.JTextField txtBairro, javax.swing.JTextField txtLogradouro, 
+            javax.swing.JTextField txtNumero, javax.swing.JTextField txtComplemento) throws SQLException {
+        String sql = "SELECT * FROM cliente WHERE cpf = ?";
         
         try (Connection conn = Conexao.conectar();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             
-            while (rs.next()) {
-                Object[] linha = new Object[5];
-                linha[0] = rs.getInt("id_cliente");
-                linha[1] = rs.getString("nome");
-                linha[2] = rs.getString("cpf") != null ? rs.getString("cpf") : rs.getString("cnpj");
-                linha[3] = rs.getString("tipo_pessoa");
-                clientes.add(linha);
+            stmt.setString(1, cpf);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    txtNome.setText(rs.getString("nome"));
+                    String tipo = rs.getString("tipo_pessoa");
+                    if (tipo != null && (tipo.equalsIgnoreCase("F") || tipo.contains("Física"))) {
+                        comboTipo.setSelectedIndex(0);
+                    } else {
+                        comboTipo.setSelectedIndex(1);
+                    }
+                    txtCnpj.setText(rs.getString("cnpj"));
+                    txtCep.setText(rs.getString("cep"));
+                    txtEstado.setText(rs.getString("estado"));
+                    txtCidade.setText(rs.getString("cidade"));
+                    txtBairro.setText(rs.getString("bairro"));
+                    txtLogradouro.setText(rs.getString("logradouro"));
+                    txtNumero.setText(rs.getString("numero"));
+                    txtComplemento.setText(rs.getString("complemento"));
+                    return true;
+                }
             }
         }
-        return clientes;
+        return false;
     }
 
     // ==========================================
-    // UPDATE (Atualizar Cliente)
+    // UPDATE (Atualizar Cliente por CPF)
     // ==========================================
-    public void atualizar(int idCliente, String nome, String cep, String estado, String cidade, String bairro, String logradouro, String numero, String complemento) throws SQLException {
-        String sql = "UPDATE cliente SET nome = ?, cep = ?, estado = ?, cidade = ?, bairro = ?, logradouro = ?, numero = ?, complemento = ? WHERE id_cliente = ?";
+    public void atualizarPorCpf(String nome, String cep, String estado, String cidade, String bairro, String logradouro, String numero, String complemento, char tipoPessoa, String cpf, String cnpj) throws SQLException {
+        String sql = "UPDATE cliente SET nome = ?, cep = ?, estado = ?, cidade = ?, bairro = ?, logradouro = ?, numero = ?, complemento = ?, tipo_pessoa = ?, cnpj = ? WHERE cpf = ?";
         
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -82,22 +96,24 @@ public class ClienteDAO {
             stmt.setString(6, logradouro);
             stmt.setString(7, numero);
             stmt.setString(8, complemento);
-            stmt.setInt(9, idCliente);
+            stmt.setString(9, String.valueOf(tipoPessoa));
+            stmt.setString(10, cnpj);
+            stmt.setString(11, cpf);
             
             stmt.executeUpdate();
         }
     }
 
     // ==========================================
-    // DELETE (Remover Cliente)
+    // DELETE (Remover Cliente por CPF)
     // ==========================================
-    public void deletar(int idCliente) throws SQLException {
-        String sql = "DELETE FROM cliente WHERE id_cliente = ?";
+    public void deletarPorCpf(String cpf) throws SQLException {
+        String sql = "DELETE FROM cliente WHERE cpf = ?";
         
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
-            stmt.setInt(1, idCliente);
+            stmt.setString(1, cpf);
             stmt.executeUpdate();
         } catch (SQLException e) {
             if (e.getErrorCode() == 1451) {

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package visao.com.br;
+package br.visao;
 
 /**
  *
@@ -148,15 +148,19 @@ public class TelaCliente extends javax.swing.JFrame {
 
         jButton1.setBackground(new java.awt.Color(153, 255, 153));
         jButton1.setText("Cadastrar");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
 
         jButton2.setBackground(new java.awt.Color(255, 204, 153));
         jButton2.setText("Alterar");
+        jButton2.addActionListener(this::jButton2ActionPerformed);
 
         jButton3.setBackground(new java.awt.Color(255, 153, 153));
         jButton3.setText("Excluir");
+        jButton3.addActionListener(this::jButton3ActionPerformed);
 
         jButton4.setBackground(new java.awt.Color(255, 255, 153));
         jButton4.setText("Consultar");
+        jButton4.addActionListener(this::jButton4ActionPerformed);
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pessoa Física", "Pessoa Jurídica", " " }));
         jComboBox1.addActionListener(this::jComboBox1ActionPerformed);
@@ -337,6 +341,117 @@ public class TelaCliente extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            String nome = jTextField2.getText().trim();
+            if (nome.isEmpty() || nome.equals("Nome Completo")) {
+                javax.swing.JOptionPane.showMessageDialog(this, "O campo Nome é obrigatório!", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            char tipoPessoa = jComboBox1.getSelectedIndex() == 0 ? 'F' : 'J';
+            String cpf = jTextField3.getText().trim();
+            String cnpj = jTextField9.getText().trim();
+            String cep = jTextField4.getText().trim();
+            String estado = jTextField1.getText().trim();
+            String cidade = jTextField5.getText().trim();
+            String bairro = jTextField10.getText().trim();
+            String logradouro = jTextField6.getText().trim();
+            String numero = jTextField11.getText().trim();
+            String complemento = jTextField8.getText().trim();
+            
+            br.controle.ClienteDAO dao = new br.controle.ClienteDAO();
+            dao.inserir(nome, cep, estado, cidade, bairro, logradouro, numero, complemento, tipoPessoa, cpf, cnpj);
+            
+            javax.swing.JOptionPane.showMessageDialog(this, "Cliente cadastrado com sucesso!");
+            limparCampos();
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Erro ao cadastrar cliente: " + e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        try {
+            String cpf = jTextField3.getText().trim();
+            if (cpf.isEmpty() || cpf.equals("CPF do cliente")) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Informe o CPF para realizar a consulta!", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            br.controle.ClienteDAO dao = new br.controle.ClienteDAO();
+            boolean encontrado = dao.buscarPorCpf(cpf, jTextField2, jComboBox1, jTextField9, jTextField4, jTextField1, jTextField5, jTextField10, jTextField6, jTextField11, jTextField8);
+            
+            if (!encontrado) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Nenhum cliente encontrado com este CPF.", "Aviso", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Erro ao consultar cliente: " + e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            String cpf = jTextField3.getText().trim();
+            if (cpf.isEmpty() || cpf.equals("CPF do cliente")) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Informe o CPF do cliente que deseja alterar!", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            String nome = jTextField2.getText().trim();
+            char tipoPessoa = jComboBox1.getSelectedIndex() == 0 ? 'F' : 'J';
+            String cnpj = jTextField9.getText().trim();
+            String cep = jTextField4.getText().trim();
+            String estado = jTextField1.getText().trim();
+            String cidade = jTextField5.getText().trim();
+            String bairro = jTextField10.getText().trim();
+            String logradouro = jTextField6.getText().trim();
+            String numero = jTextField11.getText().trim();
+            String complemento = jTextField8.getText().trim();
+            
+            br.controle.ClienteDAO dao = new br.controle.ClienteDAO();
+            dao.atualizarPorCpf(nome, cep, estado, cidade, bairro, logradouro, numero, complemento, tipoPessoa, cpf, cnpj);
+            
+            javax.swing.JOptionPane.showMessageDialog(this, "Cliente atualizado com sucesso!");
+            limparCampos();
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Erro ao atualizar cliente: " + e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        try {
+            String cpf = jTextField3.getText().trim();
+            if (cpf.isEmpty() || cpf.equals("CPF do cliente")) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Informe o CPF do cliente que deseja excluir!", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            int confirmacao = javax.swing.JOptionPane.showConfirmDialog(this, "Deseja realmente excluir este cliente?", "Confirmação", javax.swing.JOptionPane.YES_NO_OPTION);
+            if (confirmacao == javax.swing.JOptionPane.YES_OPTION) {
+                br.controle.ClienteDAO dao = new br.controle.ClienteDAO();
+                dao.deletarPorCpf(cpf);
+                javax.swing.JOptionPane.showMessageDialog(this, "Cliente excluído com sucesso!");
+                limparCampos();
+            }
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Erro ao excluir cliente: " + e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+    
+    private void limparCampos() {
+        jTextField2.setText("");
+        jTextField3.setText("");
+        jTextField9.setText("");
+        jTextField4.setText("");
+        jTextField1.setText("");
+        jTextField5.setText("");
+        jTextField10.setText("");
+        jTextField6.setText("");
+        jTextField11.setText("");
+        jTextField8.setText("");
+        jComboBox1.setSelectedIndex(0);
+    }
+    
     /**
      * @param args the command line arguments
      */
