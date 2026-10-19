@@ -1,10 +1,10 @@
 # Projeto_Final-Laboratorio_de_Banco_de_Dados
 Trabalho do Grupo 6, composto por: 
-- Ana Luiza Vieira Peixoto,
-- Arthur Moreira de Alencar,
-- João Pedro Gomes de Moraes,
-- Kaleb Kelvin da Costa Durães,
-- Rianne Moreira Siqueira.
+Ana Luiza Vieira Peixoto,
+Arthur Moreira de Alencar,
+João Pedro Gomes de Moraes,
+Kaleb Kelvin da Costa Durães,
+Rianne Moreira Siqueira.
 
 O tema escolhido para o projeto foi 'Sistema de Gerenciamento de Oficina Mecânica'
 
@@ -41,14 +41,14 @@ A estrutura foi desenvolvida para organizar os dados, estabelecer relacionamento
 - 06_hash_senhas.py: implementação de uma função para gerar hashes de senhas utilizando salt.
   
 5. Como executar o projeto:
-Abra o MySQL Workbench e conecte-se ao servidor MySQL.
-Execute o arquivo 01_ddl.sql para criar o banco de dados e sua estrutura.
-Execute o arquivo 02_carga.sql para inserir os dados de teste.
-Execute o arquivo 03_consultas.sql para verificar as consultas do projeto.
-Execute o arquivo 04_otimizacao.sql para analisar o desempenho das consultas utilizando EXPLAIN ANALYZE.
-Se necessário, execute o arquivo 04.1_testes.sql para realizar testes auxiliares e comparativos relacionados à otimização.
-Execute o arquivo 05_seguranca.sql para configurar os perfis de acesso, os privilégios, a visão e os gatilhos de auditoria, após a criação das tabelas necessárias.
-Utilize o arquivo 06_hash_senhas.py em um ambiente Python para testar a função de geração de hashes de senhas com salt.
+- Abra o MySQL Workbench e conecte-se ao servidor MySQL.
+- Execute o arquivo 01_ddl.sql para criar o banco de dados e sua estrutura.
+- Execute o arquivo 02_carga.sql para inserir os dados de teste.
+- Execute o arquivo 03_consultas.sql para verificar as consultas do projeto.
+- Execute o arquivo 04_otimizacao.sql para analisar o desempenho das consultas utilizando EXPLAIN ANALYZE.
+- Se necessário, execute o arquivo 04.1_testes.sql para realizar testes auxiliares e comparativos relacionados à otimização.
+- Execute o arquivo 05_seguranca.sql para configurar os perfis de acesso, os privilégios, a visão e os gatilhos de auditoria, após a criação das tabelas necessárias.
+- Utilize o arquivo 06_hash_senhas.py em um ambiente Python para testar a função de geração de hashes de senhas com salt.
 
 Observações:
 (OBS1: Atenção: antes de executar os arquivos de criação da estrutura ou de carga, verifique seu conteúdo. Alguns comandos podem apagar e recriar o banco de dados ou alterar os dados existentes. Execute-os somente quando estiver preparado para essas alterações.)
