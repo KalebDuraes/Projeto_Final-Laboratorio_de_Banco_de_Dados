@@ -110,15 +110,19 @@ public class TelaServico extends javax.swing.JFrame {
 
         jButton1.setBackground(new java.awt.Color(153, 255, 153));
         jButton1.setText("Cadastrar");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
 
         jButton2.setBackground(new java.awt.Color(255, 204, 153));
         jButton2.setText("Alterar");
+        jButton2.addActionListener(this::jButton2ActionPerformed);
 
         jButton4.setBackground(new java.awt.Color(255, 153, 153));
         jButton4.setText("Excluir");
+        jButton4.addActionListener(this::jButton4ActionPerformed);
 
         jButton5.setBackground(new java.awt.Color(255, 255, 153));
         jButton5.setText("Consultar");
+        jButton5.addActionListener(this::jButton5ActionPerformed);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -256,6 +260,110 @@ public class TelaServico extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField7ActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            int idVeiculo = Integer.parseInt(jTextField3.getText().trim());
+            int idAtendente = Integer.parseInt(jTextField7.getText().trim());
+            int idMecanico = Integer.parseInt(jTextField9.getText().trim());
+            String status = jTextField4.getText().trim();
+            
+            String garantiaStr = jTextField1.getText().trim();
+            Integer idGarantia = (garantiaStr.isEmpty() || garantiaStr.equals("Opcional...")) ? null : Integer.parseInt(garantiaStr);
+            
+            br.controle.OrdemServicoDAO dao = new br.controle.OrdemServicoDAO();
+            dao.inserir(idVeiculo, idAtendente, idMecanico, status, idGarantia);
+            
+            javax.swing.JOptionPane.showMessageDialog(this, "Ordem de Serviço cadastrada com sucesso!");
+            limparCampos();
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Erro: Os IDs devem ser números inteiros válidos.", "Erro de Validação", javax.swing.JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Erro ao cadastrar OS: " + e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        try {
+            String idStr = jTextField2.getText().trim();
+            if (idStr.isEmpty() || idStr.equals("Gerado pelo banco")) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Informe o ID da ordem no primeiro campo para consultar!", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            int idOs = Integer.parseInt(idStr);
+            br.controle.OrdemServicoDAO dao = new br.controle.OrdemServicoDAO();
+            boolean encontrado = dao.buscarPorId(idOs, jTextField3, jTextField7, jTextField9, jTextField4, jTextField1);
+            
+            if (!encontrado) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Nenhuma Ordem de Serviço encontrada com este ID.", "Aviso", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "O ID da ordem deve ser um número inteiro.", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Erro ao consultar OS: " + e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            String idStr = jTextField2.getText().trim();
+            if (idStr.isEmpty() || idStr.equals("Gerado pelo banco")) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Informe o ID da ordem para realizar a alteração!", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            int idOs = Integer.parseInt(idStr);
+            int idVeiculo = Integer.parseInt(jTextField3.getText().trim());
+            int idAtendente = Integer.parseInt(jTextField7.getText().trim());
+            int idMecanico = Integer.parseInt(jTextField9.getText().trim());
+            String status = jTextField4.getText().trim();
+            
+            String garantiaStr = jTextField1.getText().trim();
+            Integer idGarantia = (garantiaStr.isEmpty() || garantiaStr.equals("Opcional...")) ? null : Integer.parseInt(garantiaStr);
+            
+            br.controle.OrdemServicoDAO dao = new br.controle.OrdemServicoDAO();
+            dao.atualizar(idOs, idVeiculo, idAtendente, idMecanico, status, idGarantia);
+            
+            javax.swing.JOptionPane.showMessageDialog(this, "Ordem de Serviço atualizada com sucesso!");
+            limparCampos();
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Erro de formato numérico nos campos de ID.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Erro ao atualizar OS: " + e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        try {
+            String idStr = jTextField2.getText().trim();
+            if (idStr.isEmpty() || idStr.equals("Gerado pelo banco")) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Informe o ID da ordem que deseja excluir!", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            int idOs = Integer.parseInt(idStr);
+            int confirmacao = javax.swing.JOptionPane.showConfirmDialog(this, "Deseja realmente excluir esta Ordem de Serviço?", "Confirmação", javax.swing.JOptionPane.YES_NO_OPTION);
+            
+            if (confirmacao == javax.swing.JOptionPane.YES_OPTION) {
+                br.controle.OrdemServicoDAO dao = new br.controle.OrdemServicoDAO();
+                dao.deletar(idOs);
+                javax.swing.JOptionPane.showMessageDialog(this, "Ordem de Serviço excluída com sucesso!");
+                limparCampos();
+            }
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Erro ao excluir OS: " + e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void limparCampos() {
+        jTextField2.setText("Gerado pelo banco");
+        jTextField3.setText("Digite o ID");
+        jTextField7.setText("Digite o ID");
+        jTextField9.setText("Digite o ID");
+        jTextField4.setText("Status");
+        jTextField1.setText("Opcional...");
+    }
+    
     /**
      * @param args the command line arguments
      */
