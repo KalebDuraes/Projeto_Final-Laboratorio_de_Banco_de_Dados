@@ -1,0 +1,10 @@
+import hashlib
+import os
+
+def gerar_senha_hash(senha_plana):
+    # Gera um salt aleatório
+    salt = os.urandom(16)
+    # Aplica o hash SHA-256 combinando o salt e a senha
+    pwd_hash = hashlib.pbkdf2_hmac('sha256', senha_plana.encode('utf-8'), salt, 100000)
+    # Retorna o salt e o hash concatenados para armazenamento
+    return salt + pwd_hash
