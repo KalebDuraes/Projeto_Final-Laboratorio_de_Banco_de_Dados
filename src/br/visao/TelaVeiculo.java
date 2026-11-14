@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package br.visao;
+package visao.com.br;
 
 /**
  *
@@ -49,6 +49,7 @@ public class TelaVeiculo extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jBvoltar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -109,19 +110,20 @@ public class TelaVeiculo extends javax.swing.JFrame {
 
         jButton1.setBackground(new java.awt.Color(153, 255, 153));
         jButton1.setText("Cadastrar");
-        jButton1.addActionListener(this::jButton1ActionPerformed);
 
         jButton2.setBackground(new java.awt.Color(255, 204, 153));
         jButton2.setText("Alterar");
-        jButton2.addActionListener(this::jButton2ActionPerformed);
 
         jButton4.setBackground(new java.awt.Color(255, 153, 153));
         jButton4.setText("Excluir");
-        jButton4.addActionListener(this::jButton4ActionPerformed);
 
         jButton5.setBackground(new java.awt.Color(255, 255, 153));
         jButton5.setText("Consultar");
-        jButton5.addActionListener(this::jButton5ActionPerformed);
+
+        jBvoltar.setBackground(new java.awt.Color(204, 204, 204));
+        jBvoltar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+        jBvoltar.setText("Voltar");
+        jBvoltar.addActionListener(this::jBvoltarActionPerformed);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -133,6 +135,8 @@ public class TelaVeiculo extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jBvoltar)
+                                .addGap(182, 182, 182)
                                 .addComponent(jLmenu)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(jSeparator1))
@@ -164,7 +168,7 @@ public class TelaVeiculo extends javax.swing.JFrame {
                                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(0, 17, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -172,7 +176,9 @@ public class TelaVeiculo extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLmenu)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLmenu)
+                            .addComponent(jBvoltar))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -253,106 +259,13 @@ public class TelaVeiculo extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       try {
-            String placa = jTextField2.getText().trim();
-            if (placa.isEmpty() || placa.equals("ABC1D23")) {
-                javax.swing.JOptionPane.showMessageDialog(this, "O campo Placa é obrigatório!", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-            
-            String modelo = jTextField7.getText().trim();
-            String marca = jTextField3.getText().trim();
-            int ano = Integer.parseInt(jTextField9.getText().trim());
-            String cor = jTextField4.getText().trim();
-            int idCliente = Integer.parseInt(jTextField1.getText().trim());
-            
-            br.controle.VeiculoDAO dao = new br.controle.VeiculoDAO();
-            dao.inserir(placa, modelo, marca, ano, cor, idCliente);
-            
-            javax.swing.JOptionPane.showMessageDialog(this, "Veículo cadastrado com sucesso!");
-            limparCampos();
-        } catch (NumberFormatException e) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro: O Ano e o ID do Cliente devem ser números válidos.", "Erro de Validação", javax.swing.JOptionPane.ERROR_MESSAGE);
-        } catch (Exception e) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro ao cadastrar veículo: " + e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void jBvoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBvoltarActionPerformed
+        // TODO add your handling code here:
+        TelaPrincipal tela = new TelaPrincipal();
+        tela.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jBvoltarActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        try {
-            String placa = jTextField2.getText().trim();
-            if (placa.isEmpty() || placa.equals("ABC1D23")) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Informe a Placa do veículo que deseja excluir!", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-            
-            int confirmacao = javax.swing.JOptionPane.showConfirmDialog(this, "Deseja realmente excluir este veículo?", "Confirmação", javax.swing.JOptionPane.YES_NO_OPTION);
-            if (confirmacao == javax.swing.JOptionPane.YES_OPTION) {
-                br.controle.VeiculoDAO dao = new br.controle.VeiculoDAO();
-                dao.deletarPorPlaca(placa);
-                javax.swing.JOptionPane.showMessageDialog(this, "Veículo excluído com sucesso!");
-                limparCampos();
-            }
-        } catch (Exception e) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro ao excluir veículo: " + e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_jButton4ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        try {
-            String placa = jTextField2.getText().trim();
-            if (placa.isEmpty() || placa.equals("ABC1D23")) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Informe a Placa do veículo que deseja alterar!", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-            
-            String modelo = jTextField7.getText().trim();
-            String marca = jTextField3.getText().trim();
-            int ano = Integer.parseInt(jTextField9.getText().trim());
-            String cor = jTextField4.getText().trim();
-            int idCliente = Integer.parseInt(jTextField1.getText().trim());
-            
-            br.controle.VeiculoDAO dao = new br.controle.VeiculoDAO();
-            dao.atualizarPorPlaca(placa, modelo, marca, ano, cor, idCliente);
-            
-            javax.swing.JOptionPane.showMessageDialog(this, "Veículo atualizado com sucesso!");
-            limparCampos();
-        } catch (NumberFormatException e) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro: O Ano e o ID do Cliente devem ser números válidos.", "Erro de Validação", javax.swing.JOptionPane.ERROR_MESSAGE);
-        } catch (Exception e) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro ao atualizar veículo: " + e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        try {
-            String placa = jTextField2.getText().trim();
-            if (placa.isEmpty() || placa.equals("ABC1D23")) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Informe a Placa para realizar a consulta!", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-            
-            br.controle.VeiculoDAO dao = new br.controle.VeiculoDAO();
-            boolean encontrado = dao.buscarPorPlaca(placa, jTextField7, jTextField3, jTextField9, jTextField4, jTextField1);
-            
-            if (!encontrado) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Nenhum veículo encontrado com esta placa.", "Aviso", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-            }
-        } catch (Exception e) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro ao consultar veículo: " + e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_jButton5ActionPerformed
-    
-    private void limparCampos() {
-        jTextField2.setText("ABC1D23");
-        jTextField7.setText("Modelo do veículo");
-        jTextField3.setText("Marca");
-        jTextField9.setText("Ano");
-        jTextField4.setText("COR");
-        jTextField1.setText("ID do cliente");
-    }
-    
     /**
      * @param args the command line arguments
      */
@@ -383,6 +296,7 @@ public class TelaVeiculo extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jBvoltar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
