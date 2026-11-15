@@ -78,22 +78,22 @@ INSERT INTO peca (id_peca, nome, descricao, preco_unitario_sugerido) VALUES
 (8, 'Vela de Ignição', 'Vela de Iridium', 60.00);
 
 -- 7. CARGA: VEÍCULO
-INSERT INTO veiculo (id_veiculo, modelo, placa, id_cliente) VALUES
-(1, 'Honda Civic 2020', 'ABC1234', 1),
-(2, 'Toyota Corolla 2021', 'DEF5678', 2),
-(3, 'Volkswagen Polo 2019', 'GHI9012', 3),
-(4, 'Fiat Ducato 2018 (Frota)', 'JKL3456', 4),
-(5, 'Mercedes Sprinter 2022 (Frota)', 'MNO7890', 4),
-(6, 'Hyundai HB20 2022', 'PQR1234', 5),
-(7, 'Chevrolet Onix 2023', 'STU5678', 6),
-(8, 'Volvo FH 540 (Frota)', 'VWX9012', 7),
-(9, 'Scania R450 (Frota)', 'YZA3456', 7),
-(10, 'Jeep Compass 2021', 'BCD7890', 8),
-(11, 'Renault Kwid 2020', 'EFG1234', 8),
-(12, 'BMW X1 2022', 'HIJ5678', 9),
-(13, 'Fiat Argo 2021', 'KLM9012', 10),
-(14, 'Fiat Mobi 2022', 'NOP3456', 10),
-(15, 'Volkswagen T-Cross 2023', 'QRS7890', 10);
+INSERT INTO veiculo (id_veiculo, modelo, marca, ano, cor, placa, id_cliente) VALUES
+(1,  'Civic',      'Honda',         2020, 'Prata',    'ABC1234', 1),
+(2,  'Corolla',    'Toyota',        2021, 'Branco',   'DEF5678', 2),
+(3,  'Polo',       'Volkswagen',    2019, 'Preto',    'GHI9012', 3),
+(4,  'Ducato',     'Fiat',          2018, 'Branco',   'JKL3456', 4),
+(5,  'Sprinter',   'Mercedes-Benz', 2022, 'Branco',   'MNO7890', 4),
+(6,  'HB20',       'Hyundai',       2022, 'Vermelho', 'PQR1234', 5),
+(7,  'Onix',       'Chevrolet',     2023, 'Cinza',    'STU5678', 6),
+(8,  'FH 540',     'Volvo',         2021, 'Azul',     'VWX9012', 7),
+(9,  'R450',       'Scania',        2020, 'Branco',   'YZA3456', 7),
+(10, 'Compass',    'Jeep',          2021, 'Preto',    'BCD7890', 8),
+(11, 'Kwid',       'Renault',       2020, 'Laranja',  'EFG1234', 8),
+(12, 'X1',         'BMW',           2022, 'Preto',    'HIJ5678', 9),
+(13, 'Argo',       'Fiat',          2021, 'Prata',    'KLM9012', 10),
+(14, 'Mobi',       'Fiat',          2022, 'Branco',   'NOP3456', 10),
+(15, 'T-Cross',    'Volkswagen',    2023, 'Cinza',    'QRS7890', 10);
 
 -- 8. CARGA: ORDEM DE SERVIÇO (Atribuindo id_atendente)
 INSERT INTO ordem_servico (id_ordem_servico, data_abertura, data_fechamento, situacao, id_veiculo, id_atendente, id_os_garantia) VALUES
