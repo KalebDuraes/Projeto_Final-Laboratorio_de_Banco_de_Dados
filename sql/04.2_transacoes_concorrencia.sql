@@ -22,7 +22,7 @@ WHERE id_ordem_servico = 36
 
 -- Passo 2: Registrar o pagamento recebido referente à OS #36
 INSERT INTO pagamento (id_ordem_servico, valor_total, forma_pagamento, data_pagamento)
-VALUES (36, 195.00, 'PIX', '2026-09-21 10:30:00');
+VALUES (36, 330.00, 'PIX', '2026-09-21 10:30:00');
 
 -- Passo 3: Inserir o registro cronológico no histórico (Entidade Fraca)
 INSERT INTO historico_os (data_hora, id_ordem_servico, situacao, descricao)
@@ -58,7 +58,6 @@ SELECT id_ordem_servico, situacao, data_fechamento
 FROM ordem_servico 
 WHERE id_ordem_servico = 37;
 
-
 -- =====================================================================
 -- 3. EXPERIMENTO PRÁTICO DE CONCORRÊNCIA (DUAS SESSÕES SIMULTÂNEAS)
 -- Nível de Isolamento do InnoDB: REPEATABLE READ
@@ -67,20 +66,28 @@ WHERE id_ordem_servico = 37;
 -- ---------------------------------------------------------------------
 -- SESSÃO 1 (TERMINAL A - Atendente Juliana)
 -- ---------------------------------------------------------------------
--- Passos a executar sequencialmente na Sessão 1:
+-- Execute os passos NA ORDEM, alternando entre os dois terminais.
 
--- Passo 1 (Sessão 1): Iniciar transação
+-- [S1] Passo 1: abre a transação
 START TRANSACTION;
+-- [S1] Passo 2: X-lock na linha da OS #38
+UPDATE ordem_servico SET situacao = 'EM_EXECUCAO' WHERE id_ordem_servico = 38;
 
--- Passo 2 (Sessão 1): Bloqueia a linha da OS #38 com Exclusive Lock (X-Lock)
-UPDATE ordem_servico 
-SET situacao = 'EM_EXECUCAO' 
-WHERE id_ordem_servico = 38;
+-- [S2] Passo 3: leitura consistente (não bloqueia, REPEATABLE READ): ainda mostra 'ABERTA'
+START TRANSACTION;
+SELECT id_ordem_servico, situacao FROM ordem_servico WHERE id_ordem_servico = 38;
 
--- Passo 4 (Sessão 1): Registra no histórico enquanto segura o bloqueio
+-- [S2] Passo 4: tenta alterar a mesma linha: FICA BLOQUEADA aguardando a Sessão 1
+UPDATE ordem_servico
+SET situacao = 'CANCELADA', data_fechamento = '2026-09-21'
+WHERE id_ordem_servico = 38 AND situacao = 'ABERTA';
+
+-- [S1] Passo 5: registra no histórico e libera o bloqueio
 INSERT INTO historico_os (data_hora, id_ordem_servico, situacao, descricao)
 VALUES ('2026-09-21 11:00:00', 38, 'EM_EXECUCAO', 'Iniciado atendimento técnico');
-
--- Passo 5 (Sessão 1): Finaliza a transação e libera o bloqueio da linha
 COMMIT;
 
+-- [S2] Passo 6: o UPDATE do passo 4 é liberado, mas afeta 0 linhas
+-- (a OS já não está 'ABERTA'), o que evita a atualização perdida.
+SELECT id_ordem_servico, situacao FROM ordem_servico WHERE id_ordem_servico = 38;
+ROLLBACK;

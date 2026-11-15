@@ -9,11 +9,12 @@
 -- e permitir a analise dos planos com EXPLAIN ANALYZE.
 --
 -- IMPORTANTE:
--- Os indices experimentais ja existem no banco.
--- Os comandos CREATE INDEX abaixo estao comentados apenas
--- para documentar a intervencao realizada.
--- NAO DESCOMENTAR NEM EXECUTAR NOVAMENTE sem verificar
--- previamente os indices existentes.
+-- Os indices experimentais abaixo precisam existir antes de executar
+-- os EXPLAIN ANALYZE. Os comandos CREATE INDEX estao comentados para
+-- documentar a intervencao e devem ser executados UMA UNICA VEZ,
+-- apenas se o banco foi recriado com 01_ddl.sql e 02_carga.sql.
+-- Para conferir se ja existem: SHOW INDEX FROM ordem_servico;
+-- (idem os_servico e pagamento). Se ja existirem, NAO executar de novo.
 --
 -- Os testes controlados estao no arquivo 04.1_testes.sql.
 -- ============================================================
