@@ -2,7 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package visao.com.br;
+package br.visao;
+
+import br.controle.ClienteDAO;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -150,15 +153,19 @@ public class TelaCliente extends javax.swing.JFrame {
 
         jButton1.setBackground(new java.awt.Color(153, 255, 153));
         jButton1.setText("Cadastrar");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
 
         jButton2.setBackground(new java.awt.Color(255, 204, 153));
         jButton2.setText("Alterar");
+        jButton2.addActionListener(this::jButton2ActionPerformed);
 
         jButton3.setBackground(new java.awt.Color(255, 153, 153));
         jButton3.setText("Excluir");
+        jButton3.addActionListener(this::jButton3ActionPerformed);
 
         jButton4.setBackground(new java.awt.Color(255, 255, 153));
         jButton4.setText("Consultar");
+        jButton4.addActionListener(this::jButton4ActionPerformed);
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pessoa Física", "Pessoa Jurídica", " " }));
         jComboBox1.addActionListener(this::jComboBox1ActionPerformed);
@@ -367,6 +374,72 @@ public class TelaCliente extends javax.swing.JFrame {
             tela.setVisible(true);
              this.dispose();
     }//GEN-LAST:event_jBvoltarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            ClienteDAO dao = new ClienteDAO();
+            char tipo = jComboBox1.getSelectedIndex() == 0 ? 'F' : 'J';
+            dao.inserir(
+                jTextField2.getText(), jTextField4.getText(), jTextField1.getText(),
+                jTextField5.getText(), jTextField10.getText(), jTextField6.getText(),
+                jTextField11.getText(), jTextField8.getText(), tipo,
+                jTextField3.getText(), jTextField9.getText()
+            );
+            JOptionPane.showMessageDialog(this, "Cliente cadastrado com sucesso!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        try {
+            ClienteDAO dao = new ClienteDAO();
+            String[] dados = dao.buscarPorDocumento(jTextField3.getText(), jTextField9.getText());
+            if (dados != null) {
+                jTextField2.setText(dados[0]);
+                jComboBox1.setSelectedIndex(dados[1].equals("F") ? 0 : 1);
+                jTextField3.setText(dados[2]);
+                jTextField9.setText(dados[3]);
+                jTextField4.setText(dados[4]);
+                jTextField1.setText(dados[5]);
+                jTextField5.setText(dados[6]);
+                jTextField10.setText(dados[7]);
+                jTextField6.setText(dados[8]);
+                jTextField11.setText(dados[9]);
+                jTextField8.setText(dados[10]);
+            } else {
+                JOptionPane.showMessageDialog(this, "Cliente não encontrado!");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            ClienteDAO dao = new ClienteDAO();
+            char tipo = jComboBox1.getSelectedIndex() == 0 ? 'F' : 'J';
+            dao.atualizarPorDocumento(
+                jTextField2.getText(), jTextField4.getText(), jTextField1.getText(),
+                jTextField5.getText(), jTextField10.getText(), jTextField6.getText(),
+                jTextField11.getText(), jTextField8.getText(), tipo,
+                jTextField3.getText(), jTextField9.getText()
+            );
+            JOptionPane.showMessageDialog(this, "Cliente atualizado com sucesso!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+       try {
+            ClienteDAO dao = new ClienteDAO();
+            dao.deletarPorDocumento(jTextField3.getText(), jTextField9.getText());
+            JOptionPane.showMessageDialog(this, "Cliente excluído com sucesso!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package br.controle;
 
 // @author João Pedro e Kaleb
@@ -11,23 +7,26 @@ import java.sql.*;
 public class ClienteDAO {
 
     // ==========================================
-    // CREATE (Inserir Cliente)
+    // CREATE (Inserir Cliente PF ou PJ)
     // ==========================================
-    public void inserir(String nome, String cep, String estado, String cidade, String bairro, String logradouro, String numero, String complemento, char tipoPessoa, String cpf, String cnpj) throws SQLException {
-        String sql = "INSERT INTO cliente (nome, cep, estado, cidade, bairro, logradouro, numero, complemento, tipo_pessoa, cpf, cnpj) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        
+    public void inserir(String nome, String cep, String estado, String cidade, String bairro,
+                        String logradouro, String numero, String complemento, char tipoPessoa,
+                        String cpf, String cnpj) throws SQLException {
+        String sql = "INSERT INTO cliente (nome, cep, estado, cidade, bairro, logradouro, numero, complemento, tipo_pessoa, cpf, cnpj) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setString(1, nome);
-            stmt.setString(2, cep);
-            stmt.setString(3, estado);
-            stmt.setString(4, cidade);
-            stmt.setString(5, bairro);
-            stmt.setString(6, logradouro);
-            stmt.setString(7, numero);
-            
-            if (complemento == null || complemento.trim().isEmpty()) {
+
+            stmt.setString(1, nome.trim());
+            stmt.setString(2, cep.replaceAll("\\D", "")); // Remove traços do CEP para caber no CHAR(8)
+            stmt.setString(3, estado.trim().toUpperCase());
+            stmt.setString(4, cidade.trim());
+            stmt.setString(5, bairro.trim());
+            stmt.setString(6, logradouro.trim());
+            stmt.setString(7, numero.trim());
+
+            if (complemento == null || complemento.trim().isEmpty() || complemento.equals("Apartamento, casa...")) {
                 stmt.setNull(8, Types.VARCHAR);
             } else {
                 stmt.setString(8, complemento.trim());
@@ -35,126 +34,140 @@ public class ClienteDAO {
 
             stmt.setString(9, String.valueOf(tipoPessoa));
 
-            // Trata a regra de negócio da constraint ck_cliente_doc:
-            // Para Pessoa Física ('F'): CPF não pode ser nulo/vazio e CNPJ DEVE ser NULL.
-            // Para Pessoa Jurídica ('J'): CNPJ não pode ser nulo/vazio e CPF DEVE ser NULL.
             if (tipoPessoa == 'F') {
-                if (cpf == null || cpf.trim().isEmpty()) {
-                    stmt.setNull(10, Types.CHAR);
-                } else {
-                    stmt.setString(10, cpf.trim());
-                }
-                stmt.setNull(11, Types.CHAR); // Força CNPJ = NULL para Pessoa Física
+                String cpfLimpo = (cpf != null) ? cpf.replaceAll("\\D", "") : "";
+                if (cpfLimpo.isEmpty()) stmt.setNull(10, Types.CHAR);
+                else stmt.setString(10, cpfLimpo);
+                stmt.setNull(11, Types.CHAR);
             } else {
-                stmt.setNull(10, Types.CHAR); // Força CPF = NULL para Pessoa Jurídica
-                if (cnpj == null || cnpj.trim().isEmpty()) {
-                    stmt.setNull(11, Types.CHAR);
-                } else {
-                    stmt.setString(11, cnpj.trim());
-                }
+                stmt.setNull(10, Types.CHAR);
+                String cnpjLimpo = (cnpj != null) ? cnpj.replaceAll("\\D", "") : "";
+                if (cnpjLimpo.isEmpty()) stmt.setNull(11, Types.CHAR);
+                else stmt.setString(11, cnpjLimpo);
             }
-            
+
             stmt.executeUpdate();
         } catch (SQLException e) {
             if (e.getErrorCode() == 1062) {
                 throw new SQLException("Erro: Já existe um cliente cadastrado com este CPF ou CNPJ.", e);
+            } else if (e.getErrorCode() == 3819) {
+                throw new SQLException("Erro de validação: Verifique se o Tipo de Pessoa corresponde ao documento preenchido (CPF para Física ou CNPJ para Jurídica).", e);
+            } else if (e.getErrorCode() == 1406) {
+                throw new SQLException("Erro: Algum campo ultrapassou o tamanho máximo permitido (ex: CEP deve ter 8 dígitos, UF 2 letras, CPF 11 dígitos).", e);
             }
             throw e;
         }
     }
 
     // ==========================================
-    // READ (Buscar Cliente por CPF para Preencher a Tela)
+    // READ (Buscar por CPF ou CNPJ - Desacoplado do Swing)
+    // Retorna String[11]: [0]=nome, [1]=tipo_pessoa, [2]=cpf, [3]=cnpj, [4]=cep,
+    //                     [5]=estado, [6]=cidade, [7]=bairro, [8]=logradouro, [9]=numero, [10]=complemento
     // ==========================================
-    public boolean buscarPorCpf(String cpf, javax.swing.JTextField txtNome, javax.swing.JComboBox<String> comboTipo, 
-            javax.swing.JTextField txtCnpj, javax.swing.JTextField txtCep, javax.swing.JTextField txtEstado, 
-            javax.swing.JTextField txtCidade, javax.swing.JTextField txtBairro, javax.swing.JTextField txtLogradouro, 
-            javax.swing.JTextField txtNumero, javax.swing.JTextField txtComplemento) throws SQLException {
-        String sql = "SELECT * FROM cliente WHERE cpf = ?";
-        
+    public String[] buscarPorDocumento(String cpf, String cnpj) throws SQLException {
+        String cpfLimpo = (cpf != null) ? cpf.replaceAll("\\D", "") : "";
+        String cnpjLimpo = (cnpj != null) ? cnpj.replaceAll("\\D", "") : "";
+
+        boolean buscaPorCpf = !cpfLimpo.isEmpty();
+        String sql = buscaPorCpf
+                ? "SELECT * FROM cliente WHERE cpf = ?"
+                : "SELECT * FROM cliente WHERE cnpj = ?";
+
+        if (!buscaPorCpf && cnpjLimpo.isEmpty()) {
+            throw new SQLException("Informe um CPF ou CNPJ para realizar a consulta.");
+        }
+
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setString(1, cpf);
+
+            stmt.setString(1, buscaPorCpf ? cpfLimpo : cnpjLimpo);
+
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    txtNome.setText(rs.getString("nome"));
-                    String tipo = rs.getString("tipo_pessoa");
-                    if (tipo != null && (tipo.equalsIgnoreCase("F") || tipo.contains("Física"))) {
-                        comboTipo.setSelectedIndex(0);
-                    } else {
-                        comboTipo.setSelectedIndex(1);
-                    }
-                    txtCnpj.setText(rs.getString("cnpj") != null ? rs.getString("cnpj") : "");
-                    txtCep.setText(rs.getString("cep"));
-                    txtEstado.setText(rs.getString("estado"));
-                    txtCidade.setText(rs.getString("cidade"));
-                    txtBairro.setText(rs.getString("bairro"));
-                    txtLogradouro.setText(rs.getString("logradouro"));
-                    txtNumero.setText(rs.getString("numero"));
-                    txtComplemento.setText(rs.getString("complemento") != null ? rs.getString("complemento") : "");
-                    return true;
+                    return new String[]{
+                        rs.getString("nome"),
+                        rs.getString("tipo_pessoa"),
+                        rs.getString("cpf") != null ? rs.getString("cpf") : "",
+                        rs.getString("cnpj") != null ? rs.getString("cnpj") : "",
+                        rs.getString("cep"),
+                        rs.getString("estado"),
+                        rs.getString("cidade"),
+                        rs.getString("bairro"),
+                        rs.getString("logradouro"),
+                        rs.getString("numero"),
+                        rs.getString("complemento") != null ? rs.getString("complemento") : ""
+                    };
                 }
             }
         }
-        return false;
+        return null;
     }
 
     // ==========================================
-    // UPDATE (Atualizar Cliente por CPF)
+    // UPDATE (Atualizar por CPF ou CNPJ)
     // ==========================================
-    public void atualizarPorCpf(String nome, String cep, String estado, String cidade, String bairro, String logradouro, String numero, String complemento, char tipoPessoa, String cpf, String cnpj) throws SQLException {
-        String sql = "UPDATE cliente SET nome = ?, cep = ?, estado = ?, cidade = ?, bairro = ?, logradouro = ?, numero = ?, complemento = ?, tipo_pessoa = ?, cnpj = ? WHERE cpf = ?";
-        
+    public void atualizarPorDocumento(String nome, String cep, String estado, String cidade, String bairro,
+                                      String logradouro, String numero, String complemento, char tipoPessoa,
+                                      String cpf, String cnpj) throws SQLException {
+        String cpfLimpo = (cpf != null) ? cpf.replaceAll("\\D", "") : "";
+        String cnpjLimpo = (cnpj != null) ? cnpj.replaceAll("\\D", "") : "";
+
+        boolean porCpf = (tipoPessoa == 'F');
+        String sql = porCpf
+                ? "UPDATE cliente SET nome = ?, cep = ?, estado = ?, cidade = ?, bairro = ?, logradouro = ?, numero = ?, complemento = ? WHERE cpf = ?"
+                : "UPDATE cliente SET nome = ?, cep = ?, estado = ?, cidade = ?, bairro = ?, logradouro = ?, numero = ?, complemento = ? WHERE cnpj = ?";
+
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setString(1, nome);
-            stmt.setString(2, cep);
-            stmt.setString(3, estado);
-            stmt.setString(4, cidade);
-            stmt.setString(5, bairro);
-            stmt.setString(6, logradouro);
-            stmt.setString(7, numero);
-            
+
+            stmt.setString(1, nome.trim());
+            stmt.setString(2, cep.replaceAll("\\D", ""));
+            stmt.setString(3, estado.trim().toUpperCase());
+            stmt.setString(4, cidade.trim());
+            stmt.setString(5, bairro.trim());
+            stmt.setString(6, logradouro.trim());
+            stmt.setString(7, numero.trim());
+
             if (complemento == null || complemento.trim().isEmpty()) {
                 stmt.setNull(8, Types.VARCHAR);
             } else {
                 stmt.setString(8, complemento.trim());
             }
 
-            stmt.setString(9, String.valueOf(tipoPessoa));
+            stmt.setString(9, porCpf ? cpfLimpo : cnpjLimpo);
 
-            if (tipoPessoa == 'F') {
-                stmt.setNull(10, Types.CHAR);
-            } else {
-                if (cnpj == null || cnpj.trim().isEmpty()) {
-                    stmt.setNull(10, Types.CHAR);
-                } else {
-                    stmt.setString(10, cnpj.trim());
-                }
+            int linhas = stmt.executeUpdate();
+            if (linhas == 0) {
+                throw new SQLException("Nenhum cliente encontrado com o " + (porCpf ? "CPF" : "CNPJ") + " informado para atualização.");
             }
-
-            stmt.setString(11, cpf);
-            
-            stmt.executeUpdate();
         }
     }
 
     // ==========================================
-    // DELETE (Remover Cliente por CPF)
+    // DELETE (Remover por CPF ou CNPJ)
     // ==========================================
-    public void deletarPorCpf(String cpf) throws SQLException {
-        String sql = "DELETE FROM cliente WHERE cpf = ?";
-        
+    public void deletarPorDocumento(String cpf, String cnpj) throws SQLException {
+        String cpfLimpo = (cpf != null) ? cpf.replaceAll("\\D", "") : "";
+        String cnpjLimpo = (cnpj != null) ? cnpj.replaceAll("\\D", "") : "";
+
+        boolean porCpf = !cpfLimpo.isEmpty();
+        if (!porCpf && cnpjLimpo.isEmpty()) {
+            throw new SQLException("Informe o CPF ou CNPJ do cliente que deseja excluir.");
+        }
+
+        String sql = porCpf ? "DELETE FROM cliente WHERE cpf = ?" : "DELETE FROM cliente WHERE cnpj = ?";
+
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setString(1, cpf);
-            stmt.executeUpdate();
+
+            stmt.setString(1, porCpf ? cpfLimpo : cnpjLimpo);
+            int linhas = stmt.executeUpdate();
+            if (linhas == 0) {
+                throw new SQLException("Nenhum cliente encontrado com o documento informado para exclusão.");
+            }
         } catch (SQLException e) {
             if (e.getErrorCode() == 1451) {
-                throw new SQLException("Não é possível excluir este cliente pois ele possui veículos ou registros vinculados no sistema.", e);
+                throw new SQLException("Não é possível excluir este cliente pois ele possui veículos vinculados no sistema.", e);
             }
             throw e;
         }
