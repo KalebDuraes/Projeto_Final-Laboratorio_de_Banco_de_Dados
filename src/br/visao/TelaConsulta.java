@@ -4,6 +4,12 @@
  */
 package br.visao;
 
+import br.controle.ConsultaDAO;
+import java.awt.Dimension;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+
 /**
  *
  * @author riann
@@ -17,6 +23,7 @@ public class TelaConsulta extends javax.swing.JFrame {
      */
     public TelaConsulta() {
         initComponents();
+        jButton5.addActionListener(this::jButton5ActionPerformed);
     }
 
     /**
@@ -57,6 +64,7 @@ public class TelaConsulta extends javax.swing.JFrame {
 
         jButton5.setBackground(new java.awt.Color(153, 255, 153));
         jButton5.setText("Consultar");
+        jButton5.addActionListener(this::jButton5ActionPerformed);
 
         jButton6.setBackground(new java.awt.Color(255, 153, 153));
         jButton6.setText("Limpar");
@@ -138,12 +146,43 @@ public class TelaConsulta extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
+        jComboBox1.setSelectedIndex(0);
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        try {
+            ConsultaDAO dao = new ConsultaDAO();
+            int opcao = jComboBox1.getSelectedIndex();
+            String relatorio;
+
+            switch (opcao) {
+                case 0:
+                    relatorio = dao.consultarOrdensServico();
+                    break;
+                case 1:
+                    relatorio = dao.consultarVeiculosClientes();
+                    break;
+                case 2:
+                    relatorio = dao.consultarRelatorioConsolidado();
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(this, "Selecione uma opção válida de consulta.");
+                    return;
+            }
+
+            JTextArea textArea = new JTextArea(relatorio);
+            textArea.setEditable(false);
+            JScrollPane scrollPane = new JScrollPane(textArea);
+            scrollPane.setPreferredSize(new Dimension(550, 300));
+            JOptionPane.showMessageDialog(this, scrollPane, "Resultado da Consulta", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao gerar consulta: " + e.getMessage());
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments

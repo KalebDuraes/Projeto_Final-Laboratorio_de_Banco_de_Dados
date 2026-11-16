@@ -1,89 +1,119 @@
 package br.controle;
 
+// @author João Pedro e Kaleb
 import java.sql.*;
 
 public class PecaServicoDAO {
 
     // ==========================================
-    // CREATE (Cadastrar Serviço ou Peça)
+    // CREATE (Inserir Serviço ou Peça)
     // ==========================================
-    public void inserir(String tipo, String nome, String descricao, double valor) throws SQLException {
-        String sql;
-        if (tipo.equalsIgnoreCase("Serviço") || tipo.equalsIgnoreCase("Servico")) {
-            sql = "INSERT INTO servico (nome, descricao, valor_referencia) VALUES (?, ?, ?)";
-        } else {
-            sql = "INSERT INTO peca (nome, descricao, preco_unitario_sugerido) VALUES (?, ?, ?)";
+    public void inserir(boolean isServico, String nome, String descricao, double valor) throws SQLException {
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new SQLException("O nome do item é obrigatório.");
         }
+
+        String sql = isServico
+                ? "INSERT INTO servico (nome, descricao, valor_referencia) VALUES (?, ?, ?)"
+                : "INSERT INTO peca (nome, descricao, valor_unitario) VALUES (?, ?, ?)";
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setString(1, nome);
-            stmt.setString(2, descricao);
+
+            stmt.setString(1, nome.trim());
+
+            if (descricao == null || descricao.trim().isEmpty() || descricao.equals("Descrição do item")) {
+                stmt.setNull(2, Types.VARCHAR);
+            } else {
+                stmt.setString(2, descricao.trim());
+            }
+
             stmt.setDouble(3, valor);
-            
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 3819) {
+                throw new SQLException("Erro: O valor do item não pode ser negativo.", e);
+            }
+            throw e;
         }
     }
 
     // ==========================================
-    // READ (Consultar por Nome)
+    // READ (Buscar por Nome - Desacoplado do Swing)
+    // Retorna String[2]: [0]=descricao, [1]=valor
     // ==========================================
-    public boolean consultarPorNome(String tipo, String nomeBusca, javax.swing.JTextField txtDescricao, javax.swing.JTextField txtValor) throws SQLException {
-        String sql = (tipo.equalsIgnoreCase("Serviço") || tipo.equalsIgnoreCase("Servico"))
-            ? "SELECT descricao, valor_referencia FROM servico WHERE nome = ?"
-            : "SELECT descricao, preco_unitario_sugerido FROM peca WHERE nome = ?";
+    public String[] buscarPorNome(boolean isServico, String nome) throws SQLException {
+        String tabela = isServico ? "servico" : "peca";
+        String colunaValor = isServico ? "valor_referencia" : "valor_unitario";
+        String sql = "SELECT descricao, " + colunaValor + " FROM " + tabela + " WHERE nome = ?";
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setString(1, nomeBusca);
+
+            stmt.setString(1, nome.trim());
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    txtDescricao.setText(rs.getString("descricao"));
-                    txtValor.setText(String.valueOf(rs.getDouble(2)));
-                    return true;
+                    String desc = rs.getString("descricao");
+                    return new String[]{
+                        desc != null ? desc : "",
+                        String.valueOf(rs.getDouble(colunaValor))
+                    };
                 }
             }
         }
-        return false;
+        return null;
     }
 
     // ==========================================
-    // UPDATE (Alterar Serviço ou Peça)
+    // UPDATE (Atualizar por Nome)
     // ==========================================
-    public void atualizar(String tipo, String nomeAntigo, String novaDescricao, double novoValor) throws SQLException {
-        String sql = (tipo.equalsIgnoreCase("Serviço") || tipo.equalsIgnoreCase("Servico"))
-            ? "UPDATE servico SET descricao = ?, valor_referencia = ? WHERE nome = ?"
-            : "UPDATE peca SET descricao = ?, preco_unitario_sugerido = ? WHERE nome = ?";
+    public void atualizarPorNome(boolean isServico, String nome, String descricao, double valor) throws SQLException {
+        String tabela = isServico ? "servico" : "peca";
+        String colunaValor = isServico ? "valor_referencia" : "valor_unitario";
+        String sql = "UPDATE " + tabela + " SET descricao = ?, " + colunaValor + " = ? WHERE nome = ?";
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setString(1, novaDescricao);
-            stmt.setDouble(2, novoValor);
-            stmt.setString(3, nomeAntigo);
-            
-            stmt.executeUpdate();
+
+            if (descricao == null || descricao.trim().isEmpty()) {
+                stmt.setNull(1, Types.VARCHAR);
+            } else {
+                stmt.setString(1, descricao.trim());
+            }
+
+            stmt.setDouble(2, valor);
+            stmt.setString(3, nome.trim());
+
+            int linhas = stmt.executeUpdate();
+            if (linhas == 0) {
+                throw new SQLException("Nenhum item encontrado com o nome '" + nome + "' para atualizar.");
+            }
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 3819) {
+                throw new SQLException("Erro: O valor do item não pode ser negativo.", e);
+            }
+            throw e;
         }
     }
 
     // ==========================================
-    // DELETE (Excluir Serviço ou Peça)
+    // DELETE (Remover por Nome)
     // ==========================================
-    public void deletar(String tipo, String nome) throws SQLException {
-        String sql = (tipo.equalsIgnoreCase("Serviço") || tipo.equalsIgnoreCase("Servico"))
-            ? "DELETE FROM servico WHERE nome = ?"
-            : "DELETE FROM peca WHERE nome = ?";
+    public void deletarPorNome(boolean isServico, String nome) throws SQLException {
+        String tabela = isServico ? "servico" : "peca";
+        String sql = "DELETE FROM " + tabela + " WHERE nome = ?";
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setString(1, nome);
-            stmt.executeUpdate();
+
+            stmt.setString(1, nome.trim());
+            int linhas = stmt.executeUpdate();
+            if (linhas == 0) {
+                throw new SQLException("Nenhum item encontrado com o nome '" + nome + "' para exclusão.");
+            }
         } catch (SQLException e) {
             if (e.getErrorCode() == 1451) {
-                throw new SQLException("Não é possível excluir este item pois ele está associado a Ordens de Serviço.", e);
+                throw new SQLException("Não é possível excluir este item pois ele já está vinculado a uma Ordem de Serviço.", e);
             }
             throw e;
         }

@@ -4,6 +4,8 @@
  */
 package br.visao;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author riann
