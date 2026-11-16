@@ -5,6 +5,7 @@
 package br.visao;
 
 import javax.swing.JOptionPane;
+import br.controle.PecaServicoDAO;
 
 /**
  *
@@ -95,15 +96,19 @@ public class TelaPecas extends javax.swing.JFrame {
 
         jButton1.setBackground(new java.awt.Color(153, 255, 153));
         jButton1.setText("Cadastrar");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
 
         jButton2.setBackground(new java.awt.Color(255, 204, 153));
         jButton2.setText("Alterar");
+        jButton2.addActionListener(this::jButton2ActionPerformed);
 
         jButton4.setBackground(new java.awt.Color(255, 153, 153));
         jButton4.setText("Excluir");
+        jButton4.addActionListener(this::jButton4ActionPerformed);
 
         jButton5.setBackground(new java.awt.Color(255, 255, 153));
         jButton5.setText("Consultar");
+        jButton5.addActionListener(this::jButton5ActionPerformed);
 
         jBvoltar.setBackground(new java.awt.Color(204, 204, 204));
         jBvoltar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
@@ -236,6 +241,65 @@ public class TelaPecas extends javax.swing.JFrame {
         tela.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jBvoltarActionPerformed
+    
+    private boolean isServico(String tipoTexto) {
+        String t = tipoTexto.trim().toLowerCase();
+        return t.startsWith("serv");
+    }
+    
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            PecaServicoDAO dao = new PecaServicoDAO();
+            double valor = Double.parseDouble(jTextField9.getText().trim().replace(",", "."));
+            dao.inserir(isServico(jTextField2.getText()), jTextField7.getText(), jTextField3.getText(), valor);
+            JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso!");
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Informe um valor numérico válido (ex: 120.50).");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        try {
+            PecaServicoDAO dao = new PecaServicoDAO();
+            String[] dados = dao.buscarPorNome(isServico(jTextField2.getText()), jTextField7.getText());
+            if (dados != null) {
+                jTextField3.setText(dados[0]); // Descrição
+                jTextField9.setText(dados[1]); // Valor
+            } else {
+                JOptionPane.showMessageDialog(this, "Item não encontrado!");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            PecaServicoDAO dao = new PecaServicoDAO();
+            double valor = Double.parseDouble(jTextField9.getText().trim().replace(",", "."));
+            dao.atualizarPorNome(isServico(jTextField2.getText()), jTextField7.getText(), jTextField3.getText(), valor);
+            JOptionPane.showMessageDialog(this, "Item atualizado com sucesso!");
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Informe um valor numérico válido (ex: 120.50).");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        try {
+            PecaServicoDAO dao = new PecaServicoDAO();
+            dao.deletarPorNome(isServico(jTextField2.getText()), jTextField7.getText());
+            JOptionPane.showMessageDialog(this, "Item excluído com sucesso!");
+            jTextField7.setText("");
+            jTextField3.setText("");
+            jTextField9.setText("");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
