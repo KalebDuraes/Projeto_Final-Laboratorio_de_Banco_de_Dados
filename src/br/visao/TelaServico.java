@@ -4,6 +4,9 @@
  */
 package br.visao;
 
+import br.controle.OrdemServicoDAO;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author riann
@@ -111,15 +114,19 @@ public class TelaServico extends javax.swing.JFrame {
 
         jButton1.setBackground(new java.awt.Color(153, 255, 153));
         jButton1.setText("Cadastrar");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
 
         jButton2.setBackground(new java.awt.Color(255, 204, 153));
         jButton2.setText("Alterar");
+        jButton2.addActionListener(this::jButton2ActionPerformed);
 
         jButton4.setBackground(new java.awt.Color(255, 153, 153));
         jButton4.setText("Excluir");
+        jButton4.addActionListener(this::jButton4ActionPerformed);
 
         jButton5.setBackground(new java.awt.Color(255, 255, 153));
         jButton5.setText("Consultar");
+        jButton5.addActionListener(this::jButton5ActionPerformed);
 
         jBvoltar.setBackground(new java.awt.Color(204, 204, 204));
         jBvoltar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
@@ -271,6 +278,91 @@ public class TelaServico extends javax.swing.JFrame {
         tela.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jBvoltarActionPerformed
+
+    private Integer lerGarantiaOpcional() {
+        String txt = jTextField1.getText().trim();
+        if (txt.isEmpty() || txt.equalsIgnoreCase("Opcional...")) {
+            return null;
+        }
+        return Integer.parseInt(txt);
+    }   
+    
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            OrdemServicoDAO dao = new OrdemServicoDAO();
+            int idGerado = dao.inserir(
+                Integer.parseInt(jTextField7.getText().trim()), // ID Veículo
+                Integer.parseInt(jTextField3.getText().trim()), // ID Atendente
+                Integer.parseInt(jTextField9.getText().trim()), // ID Mecânico
+                jTextField4.getText(),                          // Status
+                lerGarantiaOpcional()
+            );
+            jTextField2.setText(String.valueOf(idGerado));
+            JOptionPane.showMessageDialog(this, "Ordem de Serviço #" + idGerado + " cadastrada com sucesso!");
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Os IDs (Veículo, Atendente, Mecânico e Garantia) devem ser números inteiros.");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        try {
+            OrdemServicoDAO dao = new OrdemServicoDAO();
+            int idOrdem = Integer.parseInt(jTextField2.getText().trim());
+            String[] dados = dao.buscarPorId(idOrdem);
+            if (dados != null) {
+                jTextField7.setText(dados[0]); // ID Veículo
+                jTextField3.setText(dados[1]); // ID Atendente
+                jTextField9.setText(dados[2]); // ID Mecânico
+                jTextField4.setText(dados[3]); // Status
+                jTextField1.setText(dados[4]); // ID Garantia
+            } else {
+                JOptionPane.showMessageDialog(this, "Ordem de Serviço não encontrada!");
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Informe um ID numérico válido no campo 'ID da ordem'.");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            OrdemServicoDAO dao = new OrdemServicoDAO();
+            dao.atualizar(
+                Integer.parseInt(jTextField2.getText().trim()), // ID Ordem
+                Integer.parseInt(jTextField7.getText().trim()), // ID Veículo
+                Integer.parseInt(jTextField3.getText().trim()), // ID Atendente
+                Integer.parseInt(jTextField9.getText().trim()), // ID Mecânico
+                jTextField4.getText(),                          // Status
+                lerGarantiaOpcional()
+            );
+            JOptionPane.showMessageDialog(this, "Ordem de Serviço atualizada com sucesso!");
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Verifique se todos os IDs informados são números inteiros.");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+       try {
+            OrdemServicoDAO dao = new OrdemServicoDAO();
+            dao.deletar(Integer.parseInt(jTextField2.getText().trim()));
+            JOptionPane.showMessageDialog(this, "Ordem de Serviço excluída com sucesso!");
+            jTextField2.setText("");
+            jTextField7.setText("");
+            jTextField3.setText("");
+            jTextField9.setText("");
+            jTextField4.setText("");
+            jTextField1.setText("");
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Informe o ID numérico da ordem para excluir.");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
