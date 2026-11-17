@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package br.visao;
+package br.com.visao;
 
-import br.controle.OrdemServicoDAO;
+import br.com.controle.OrdemServicoDAO;
 import javax.swing.JOptionPane;
 
 /**
@@ -85,31 +85,25 @@ public class TelaServico extends javax.swing.JFrame {
         jLmenu4.setText("Status:");
 
         jTextField2.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField2.setText("Gerado pelo banco");
         jTextField2.addActionListener(this::jTextField2ActionPerformed);
 
         jTextField3.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField3.setText("Digite o ID");
         jTextField3.addActionListener(this::jTextField3ActionPerformed);
 
         jTextField4.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField4.setText("Status");
 
         jTextField7.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField7.setText("Digite o ID");
         jTextField7.addActionListener(this::jTextField7ActionPerformed);
 
         jLabel10.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
         jLabel10.setText("ID do mecânico");
 
         jTextField9.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField9.setText("Digite o ID");
 
         jLabel11.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
-        jLabel11.setText("ID da OS de garantia:");
+        jLabel11.setText("*ID da OS de garantia:");
 
         jTextField1.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField1.setText("Opcional...");
         jTextField1.addActionListener(this::jTextField1ActionPerformed);
 
         jButton1.setBackground(new java.awt.Color(153, 255, 153));

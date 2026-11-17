@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package br.visao;
+package br.com.visao;
 
-import br.controle.VeiculoDAO;
+import br.com.controle.VeiculoDAO;
 import javax.swing.JOptionPane;
 
 /**
@@ -85,30 +85,24 @@ public class TelaVeiculo extends javax.swing.JFrame {
         jLmenu4.setText("Cor:");
 
         jTextField2.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField2.setText("ABC1D23");
         jTextField2.addActionListener(this::jTextField2ActionPerformed);
 
         jTextField3.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField3.setText("Marca");
         jTextField3.addActionListener(this::jTextField3ActionPerformed);
 
         jTextField4.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField4.setText("COR");
 
         jTextField7.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField7.setText("Modelo do veículo");
 
         jLabel10.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
         jLabel10.setText("Ano:");
 
         jTextField9.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField9.setText("Ano");
 
         jLabel11.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
         jLabel11.setText("Cliente:");
 
         jTextField1.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField1.setText("ID do cliente");
         jTextField1.addActionListener(this::jTextField1ActionPerformed);
 
         jButton1.setBackground(new java.awt.Color(153, 255, 153));

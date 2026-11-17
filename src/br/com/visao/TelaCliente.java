@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package br.visao;
+package br.com.visao;
 
-import br.controle.ClienteDAO;
+import br.com.controle.ClienteDAO;
 import javax.swing.JOptionPane;
 
 /**
@@ -102,54 +102,44 @@ public class TelaCliente extends javax.swing.JFrame {
         jLmenu3.setText("CEP:");
 
         jTextField2.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField2.setText("Nome Completo");
         jTextField2.addActionListener(this::jTextField2ActionPerformed);
 
         jTextField3.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField3.setText("CPF do cliente");
         jTextField3.addActionListener(this::jTextField3ActionPerformed);
 
         jTextField4.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField4.setText("CEP");
 
         jTextField5.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField5.setText("Cidade");
         jTextField5.addActionListener(this::jTextField5ActionPerformed);
 
         jTextField6.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField6.setText("Rua ou avenida");
         jTextField6.addActionListener(this::jTextField6ActionPerformed);
 
         jLmenu4.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
         jLmenu4.setText("Complemento:");
 
         jTextField8.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField8.setText("Apartamento, casa...");
 
         jLabel9.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
         jLabel9.setText("CNPJ:");
 
         jTextField9.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField9.setText("CNPJ da empresa");
 
         jLabel10.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
         jLabel10.setText("Estado:");
 
         jTextField1.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField1.setText("UF");
         jTextField1.addActionListener(this::jTextField1ActionPerformed);
 
         jLabel5.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
         jLabel5.setText(" Bairro:");
 
         jTextField10.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField10.setText("Bairro");
 
         jLabel6.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
         jLabel6.setText("Número:");
 
         jTextField11.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField11.setText("Número");
 
         jButton1.setBackground(new java.awt.Color(153, 255, 153));
         jButton1.setText("Cadastrar");
@@ -193,12 +183,13 @@ public class TelaCliente extends javax.swing.JFrame {
                         .addGap(6, 6, 6)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -226,7 +217,7 @@ public class TelaCliente extends javax.swing.JFrame {
                                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 705, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLmenu4))
-                        .addGap(0, 27, Short.MAX_VALUE))
+                        .addGap(0, 20, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jBvoltar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -292,13 +283,13 @@ public class TelaCliente extends javax.swing.JFrame {
                 .addComponent(jLmenu4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(4, 4, 4)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(12, Short.MAX_VALUE))
+                    .addComponent(jButton3)
+                    .addComponent(jButton2)
+                    .addComponent(jButton4)
+                    .addComponent(jButton1))
+                .addGap(14, 14, 14))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -318,7 +309,7 @@ public class TelaCliente extends javax.swing.JFrame {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(378, 378, 378))
+                .addGap(390, 390, 390))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -329,9 +320,7 @@ public class TelaCliente extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();

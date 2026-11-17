@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package br.controle;
+package br.com.controle;
 
 // @author João Pedro
 
@@ -14,7 +14,7 @@ public class Conexao {
     // URL de conexão com o banco ajustada para UTF-8 e fuso horário correto
     private static final String URL = "jdbc:mysql://localhost:3306/oficina_mecanica?useSSL=false&serverTimezone=UTC";
     private static final String USER = "root"; // Ajustar conforme o ambiente do grupo
-    private static final String PASSWORD = ""; // Ajustar conforme o ambiente do grupo
+    private static final String PASSWORD = "131289"; // Ajustar conforme o ambiente do grupo
 
     public static Connection conectar() throws SQLException {
         try {

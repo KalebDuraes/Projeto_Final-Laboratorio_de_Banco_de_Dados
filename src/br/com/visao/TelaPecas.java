@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package br.visao;
+package br.com.visao;
 
 import javax.swing.JOptionPane;
-import br.controle.PecaServicoDAO;
+import br.com.controle.PecaServicoDAO;
 
 /**
  *
@@ -78,21 +78,17 @@ public class TelaPecas extends javax.swing.JFrame {
         jLabel9.setText("Descrição:");
 
         jTextField2.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField2.setText("Serviço ou Peça");
         jTextField2.addActionListener(this::jTextField2ActionPerformed);
 
         jTextField3.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField3.setText("Descrição do item");
         jTextField3.addActionListener(this::jTextField3ActionPerformed);
 
         jTextField7.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField7.setText("Nome do serviço ou peça");
 
         jLabel10.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
         jLabel10.setText("Valor:");
 
         jTextField9.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField9.setText("Preço do seriço ou peça");
 
         jButton1.setBackground(new java.awt.Color(153, 255, 153));
         jButton1.setText("Cadastrar");
@@ -126,7 +122,7 @@ public class TelaPecas extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jBvoltar)
-                                .addGap(134, 134, 134)
+                                .addGap(148, 148, 148)
                                 .addComponent(jLmenu)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(jSeparator1))
@@ -197,9 +193,9 @@ public class TelaPecas extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(245, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(164, 164, 164))
+                .addGap(150, 150, 150))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

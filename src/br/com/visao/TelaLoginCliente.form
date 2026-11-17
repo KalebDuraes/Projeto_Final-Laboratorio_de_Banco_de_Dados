@@ -261,7 +261,6 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="99" green="99" red="99" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Digite seu CPF ou CNPJ"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTdigiteActionPerformed"/>
@@ -285,6 +284,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Digite sua senha"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTsenhaActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="jBentrar">
               <Properties>

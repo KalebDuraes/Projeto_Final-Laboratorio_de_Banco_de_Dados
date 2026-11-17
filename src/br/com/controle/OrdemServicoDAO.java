@@ -1,4 +1,4 @@
-package br.controle;
+package br.com.controle;
 
 // @author João Pedro
 import java.sql.*;
