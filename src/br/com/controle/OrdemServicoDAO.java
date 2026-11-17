@@ -11,7 +11,7 @@ public class OrdemServicoDAO {
     public int inserir(int idVeiculo, int idAtendente, int idMecanico, String status, Integer idOsGarantia) throws SQLException {
         String sqlOs = "INSERT INTO ordem_servico (data_abertura, id_veiculo, id_atendente, situacao, id_os_garantia) " +
                        "VALUES (CURDATE(), ?, ?, ?, ?)";
-        String sqlMec = "INSERT INTO os_mecanico (id_ordem_servico, id_mecanico, papel) VALUES (?, ?, 'RESPONSAVEL')";
+        String sqlMec = "INSERT INTO os_mecanico (id_ordem_servico, id_mecanico) VALUES (?, ?)";
 
         Connection conn = null;
         try {
