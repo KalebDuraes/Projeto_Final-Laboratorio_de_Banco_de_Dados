@@ -57,7 +57,7 @@ public class OrdemServicoDAO {
             if (e.getErrorCode() == 1452) {
                 throw new SQLException("Erro de chave estrangeira: Verifique se os IDs de Veículo, Atendente, Mecânico ou OS de Garantia existem no banco.", e);
             } else if (e.getErrorCode() == 3819 || e.getErrorCode() == 1265) {
-                throw new SQLException("Erro: Situação inválida. Use: ABERTA, EM_ANDAMENTO, AGUARDANDO_PECA, CONCLUIDA ou CANCELADA.", e);
+                throw new SQLException("Erro: Situação inválida. Use: ABERTA, EM_EXECUCAO, AGUARDANDO_PECAS, CONCLUIDA ou CANCELADA.", e);
             }
             throw e;
         } finally {
